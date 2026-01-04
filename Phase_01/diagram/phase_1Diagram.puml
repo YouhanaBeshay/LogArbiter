@@ -1,0 +1,58 @@
+@startuml LogManager_Phase1_ClassDiagram
+
+
+
+' Interfaces
+interface ILogSink {
+    +{abstract} write(msg: LogMessage&) : void
+}
+
+
+' Normal Class
+class LogMessage {
+    + appName : std::string;
+    +context: std::string;
+    +time: std::string;
+    +severity: std::string;
+    +payload: std::string;
+
+}
+
+
+' Main Class
+
+class LogManager {
+    +sinks_ : std::vector<std::unique_ptr<ILogSink>>
+    +messages_ : std::vector<std::unique_ptr<LogMessage>>
+    +addSink(sink: std::unique_ptr<ILogSink>) : void
+    +writeToAll(msg: const LogMessage) : void
+}
+
+
+
+' Implementaions
+
+
+class FileSinkImpl {
+    +file_ : std::ofstream
+    +FileSinkImpl(filePath: const std::string)
+    +write(msg: const LogMessage&) : void
+
+}
+
+class ConsoleSinkImpl {
+    +write(msg: const LogMessage&) : void
+}
+
+
+' Relationships
+
+ILogSink <|.. FileSinkImpl : implements
+ILogSink <|.. ConsoleSinkImpl : implements
+
+LogManager o--  ILogSink : contains
+
+LogManager --> LogMessage : uses
+ILogSink --> LogMessage : uses
+
+@enduml
