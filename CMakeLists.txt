@@ -12,6 +12,8 @@ add_executable(${PROJECT_NAME}
                                 
                                 Phase_02/src/SafeFile.cpp
                                 Phase_02/src/FileTelemetrySourceImpl.cpp
+                                Phase_02/src/SafeSocket.cpp
+                                Phase_02/src/SocketTelemetrySourceImpl.cpp
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE 
