@@ -25,20 +25,23 @@ int main(int argc, char const *argv[]) {
   manager.addSink(std::move(fileSink));
 
   std::unique_ptr<ITelemetrySource> sourcefile =
-      std::make_unique<FileTelemetrySourceImpl>(
-          "/home/youhana/ITI_assignments2/Cpp_MajorTask/My_REPO/LogArbiter/"
-          "Phase_02/Provided/shell_logs.log");
+      std::make_unique<FileTelemetrySourceImpl>("/proc/meminfo");
 
   // socket
   std::unique_ptr<ITelemetrySource> sourceSocket =
-      std::make_unique<SocketTelemetrySourceImpl>("/home/youhana/ITI_assignments2/Cpp_MajorTask/My_REPO/LogArbiter/Phase_02/Provided/telemetry.sock");
+      std::make_unique<SocketTelemetrySourceImpl>(
+          "/home/youhana/ITI_assignments2/Cpp_MajorTask/My_REPO/LogArbiter/"
+          "Phase_02/Provided/telemetry.sock");
 
   for (int i = 0; i < 10; i++) {
 
     if (sourcefile->openSource()) {
-      std::string data;
+      std::string totalmemory, freememory, availablememory;
 
-      if (sourcefile->readSource(data)) {
+      if (sourcefile->readSource(totalmemory)) {
+        sourcefile->readSource(freememory);
+        sourcefile->readSource(availablememory);
+        
         LogMessage message;
         message.appName = "LogArbiter";
         message.context = "Test_Phase2_File";
@@ -46,7 +49,8 @@ int main(int argc, char const *argv[]) {
         message.severity = "INFO";
 
         // data read from file
-        message.payload = data;
+        message.payload =
+            totalmemory + " | " + freememory + " | " + availablememory;
 
         manager.writeToAll(message);
       }
@@ -68,10 +72,9 @@ int main(int argc, char const *argv[]) {
         manager.writeToAll(message);
       }
     }
-    
+
     // sleep for 1 second
     std::this_thread::sleep_for(std::chrono::seconds(1));
-    
   }
 
   return 0;
