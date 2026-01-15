@@ -1,0 +1,52 @@
+@startuml Phase2_ClassDiagram
+
+' interfaces
+interface ITelemetrySource {
+    +{abstract} openSource() : bool
+    +{abstract} readSource(out: std::string&) : bool
+}
+
+' rule of 5 classes
+class SafeFile {
+    -fd_ : int
+    +SafeFile(filePath: const std::string)
+    +fileReadLine() : std::string
+    +fileReadLastLine() : std::string
+    +fileWrite(msg: const std::string&) : void
+    +isOpen() : bool
+}
+
+class SafeSocket {
+    -fd_ : int
+    -socketPath_ : std::string
+    +SafeSocket(socketPath: const std::string&)
+    +receiveSocket() : std::string
+    +isOpen() : bool
+
+}
+
+' Implementations (RAII Classes)
+class FileTelemetrySourceImpl {
+    -filePath_ : std::string
+    -file_ : std::unique_ptr<SafeFile>
+    +FileTelemetrySourceImpl(filePath: const std::string)
+    +openSource() : bool
+    +readSource(out: std::string&) : bool
+}
+
+class SocketTelemetrySourceImpl {
+    -socketPath_ : std::string
+    -socket_ : std::unique_ptr<SafeSocket>
+    +SocketTelemetrySourceImpl(socketPath: const std::string&)
+    +openSource() : bool
+    +readSource(out: std::string&) : bool
+}
+
+' Relationships
+ITelemetrySource <|.. FileTelemetrySourceImpl : implements
+ITelemetrySource <|.. SocketTelemetrySourceImpl : implements
+
+FileTelemetrySourceImpl o-- SafeFile : contains
+SocketTelemetrySourceImpl o-- SafeSocket : contains
+
+@enduml
