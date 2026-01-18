@@ -6,10 +6,6 @@
 #include <sys/un.h>
 #include <unistd.h>
 
-// used to make the UDS socket in non blocking mode
-// TODO: Ask if this should be handled or is blocking the correct way
-#include <fcntl.h>
-
 // i guess 32 will be enough for now
 static constexpr int BUF_SIZE = 32;
 
@@ -17,13 +13,12 @@ SafeSocket::SafeSocket(const std::string &socketPath)
     : socketPath_(socketPath) {
 
   // UDS socket == AF_UNIX
-  fd_ = socket(AF_UNIX, SOCK_STREAM, 0);
+  // SOCK_NONBLOCK == non blocking server (also propagates to client)
+  fd_ = socket(AF_UNIX, SOCK_NONBLOCK | SOCK_STREAM, 0);
 
   if (fd_ == -1) {
     std::cout << "Failed to open socket: " << socketPath << std::endl;
   } else {
-    // set socket in non blocking mode
-    fcntl(fd_, F_SETFL, O_NONBLOCK);
 
     unlink(socketPath_.c_str()); // remove the socket if it already exists
 
@@ -51,9 +46,6 @@ std::string SafeSocket::receiveSocket() {
   if (client_fd == -1)
     return "";
 
-  // set client also to non blocking
-  fcntl(client_fd, F_SETFL, O_NONBLOCK);
-
   char buffer[BUF_SIZE];
 
   ssize_t rec_bytes = recv(client_fd, buffer, sizeof(buffer) - 1, 0);
@@ -63,7 +55,6 @@ std::string SafeSocket::receiveSocket() {
 
   if (rec_bytes <= 0)
     return "";
-
 
   std::string result(buffer, rec_bytes);
   // remove any trailing '\n'
