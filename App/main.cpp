@@ -31,7 +31,7 @@ int main(int argc, char const *argv[]) {
   std::unique_ptr<ITelemetrySource> sourceSocket =
       std::make_unique<SocketTelemetrySourceImpl>(
           "/home/youhana/ITI_assignments2/Cpp_MajorTask/My_REPO/LogArbiter/"
-          "Phase_02/Provided/telemetry.sock");
+          "provided/telemetry.sock");
 
   for (int i = 0; i < 10; i++) {
 
@@ -41,7 +41,7 @@ int main(int argc, char const *argv[]) {
       if (sourcefile->readSource(totalmemory)) {
         sourcefile->readSource(freememory);
         sourcefile->readSource(availablememory);
-        
+
         LogMessage message;
         message.appName = "LogArbiter";
         message.context = "Test_Phase2_File";
