@@ -1,0 +1,48 @@
+#pragma once
+
+#include "LogEnums.hpp"
+
+
+struct CpuPolicy 
+{
+    static constexpr TelemetrySrc_enum context = TelemetrySrc_enum::CPU;
+    // string_view is a string compatible with constexpr
+    static constexpr std::string_view unit = "%";
+    static constexpr float WARNING = 70.0f;
+    static constexpr float CRITICAL = 95.0f;
+
+    static constexpr SeverityLvl_enum inferSeverity(float val) noexcept {
+        return (val > CRITICAL) ? SeverityLvl_enum::CRITICAL
+            : (val > WARNING)  ? SeverityLvl_enum::WARNING
+            :                    SeverityLvl_enum::INFO;
+    }
+};
+
+struct GpuPolicy 
+{
+    static constexpr TelemetrySrc_enum context = TelemetrySrc_enum::GPU;
+    static constexpr std::string_view unit = "%";
+    static constexpr float WARNING = 80.0f;
+    static constexpr float CRITICAL = 90.0f;
+
+    static constexpr SeverityLvl_enum inferSeverity(float val) noexcept {
+        return (val > CRITICAL) ? SeverityLvl_enum::CRITICAL
+            : (val > WARNING)  ? SeverityLvl_enum::WARNING
+            :                    SeverityLvl_enum::INFO;
+    }
+}; 
+
+struct RamPolicy 
+{
+    static constexpr TelemetrySrc_enum context = TelemetrySrc_enum::RAM;
+    // assume max RAM is 24GB
+    static constexpr std::string_view unit = "GB";
+    static constexpr float WARNING = 16.0f;
+    static constexpr float CRITICAL = 22.0f;
+
+    static constexpr SeverityLvl_enum inferSeverity(float val) noexcept {
+        return (val > CRITICAL) ? SeverityLvl_enum::CRITICAL
+            : (val > WARNING)  ? SeverityLvl_enum::WARNING
+            :                    SeverityLvl_enum::INFO;
+    }
+};
