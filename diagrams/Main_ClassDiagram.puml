@@ -1,0 +1,91 @@
+@startuml Main_ClassDiagram
+
+skinparam linetype ortho
+skinparam ranksep 60
+skinparam nodesep 20
+' ==================== CLASSES ====================
+
+' Interfaces
+interface ILogSink {
+    +{abstract} write(msg: LogMessage&) : void
+}
+
+' Normal Class
+class LogMessage {
+    +appName :  string
+    +context :  string
+    +time :  string
+    +severity :  string
+    +payload :  string
+}
+
+' Main Class
+rectangle  "Builder"{
+' Builder
+class LogManagerBuilder {
+    -sinks_ :  vector< unique_ptr<ILogSink>>
+    +addSink(sink:  unique_ptr<ILogSink>) : LogManagerBuilder&
+    +build() :  unique_ptr<LogManager>
+}
+class LogManager {
+    +sinks_ :  vector< unique_ptr<ILogSink>>
+    +messages_ :  vector< unique_ptr<LogMessage>>
+    +addSink(sink:  unique_ptr<ILogSink>) : void
+    +writeToAll(msg: const LogMessage) : void
+}
+}
+
+' Implementations
+' Factory
+rectangle "Factory "{
+class LogSinkFactory {
+    +{static} createSink(sinkType: LogSinkType_enum, 
+    {static}sinkPath: const  string&) :  unique_ptr<ILogSink>
+}
+class FileSinkImpl {
+    +file_ :  ofstream
+    +FileSinkImpl(filePath: const  string)
+    +write(msg: const LogMessage&) : void
+}
+
+class ConsoleSinkImpl {
+    +write(msg: const LogMessage&) : void
+}
+
+}
+
+
+
+' ==================== LAYOUT CONTROL ====================
+
+' Force ILogSink above its children
+ILogSink -[hidden]down- FileSinkImpl
+ILogSink -[hidden]down- ConsoleSinkImpl
+ILogSink -[hidden]down- LogSinkFactory
+
+FileSinkImpl -[hidden]right- ConsoleSinkImpl
+
+
+LogMessage -[hidden]left- ILogSink
+
+LogManager -[hidden]down- ILogSink
+
+
+LogSinkFactory -[hidden]down- FileSinkImpl
+
+' ==================== ACTUAL RELATIONSHIPS ====================
+
+ILogSink <|.. FileSinkImpl 
+ILogSink <|.. ConsoleSinkImpl 
+
+LogManager o-- ILogSink 
+
+LogManager --> LogMessage
+ILogSink --> LogMessage
+
+LogSinkFactory ..> FileSinkImpl 
+LogSinkFactory ..> ConsoleSinkImpl  
+
+LogManagerBuilder ..> LogManager 
+
+@enduml

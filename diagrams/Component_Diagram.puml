@@ -1,0 +1,15 @@
+@startuml Component_Diagram
+
+
+skinparam componentStyle rectangle
+
+left to right direction
+
+[FileTelemetrySource] --> [LogFormatter] : raw data
+[SocketTelemetrySource] --> [LogFormatter] : raw data
+[LogFormatter] --> [LogManager] : LogMessage
+[LogManager] --> [ConsoleSink] : write
+[LogManager] --> [FileSink] : write
+
+
+@enduml

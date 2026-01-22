@@ -1,4 +1,4 @@
-@startuml Phase2_ClassDiagram
+@startuml Sources_ClassDiagram
 
 ' interfaces
 interface ITelemetrySource {
