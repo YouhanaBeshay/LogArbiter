@@ -3,6 +3,7 @@ project(logarbiter_manager)
 
 add_library(${PROJECT_NAME} STATIC
     LogManager.cpp
+    LogManagerBuilder.cpp
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC
