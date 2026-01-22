@@ -6,33 +6,27 @@
 #include <sys/un.h>
 #include <unistd.h>
 
-// i guess 32 will be enough for now
-static constexpr int BUF_SIZE = 32;
 
-SafeSocket::SafeSocket(const std::string &socketPath)
-    : socketPath_(socketPath) {
+SafeSocket::SafeSocket(const std::string &socketPath) {
 
   // UDS socket == AF_UNIX
-  // SOCK_NONBLOCK == non blocking server (also propagates to client)
+  // SOCK_NONBLOCK == non blocking client
   fd_ = socket(AF_UNIX, SOCK_NONBLOCK | SOCK_STREAM, 0);
 
   if (fd_ == -1) {
     std::cout << "Failed to open socket: " << socketPath << std::endl;
   } else {
 
-    unlink(socketPath_.c_str()); // remove the socket if it already exists
-
     // bind the socket
     struct sockaddr_un addr;
     addr.sun_family = AF_UNIX;
-    strcpy(addr.sun_path, socketPath_.c_str());
+    strcpy(addr.sun_path, socketPath.c_str());
 
-    bind(fd_, (struct sockaddr *)&addr, sizeof(addr));
+    connect(fd_, (struct sockaddr *)&addr, sizeof(addr));
     if (fd_ == -1) {
-      std::cout << "Failed to bind socket: " << socketPath << std::endl;
-    } else {
-      // allow only 1 connection for now
-      listen(fd_, 1);
+      std::cout << "Failed to connect to server: " << socketPath << std::endl;
+      close(fd_);
+      fd_ = -1;
     }
   }
 }
@@ -41,27 +35,18 @@ std::string SafeSocket::receiveSocket() {
 
   if (fd_ == -1)
     return "";
+  std::string receivedline;
+  char ch;
 
-  int client_fd = accept(fd_, NULL, NULL);
-  if (client_fd == -1)
-    return "";
+  // read only one line (until \n)
+  while (read(fd_, &ch, 1) == 1) {
+    if (ch == '\n') {
+      break;
+    } else
+      receivedline += ch;
+  }
 
-  char buffer[BUF_SIZE];
-
-  ssize_t rec_bytes = recv(client_fd, buffer, sizeof(buffer) - 1, 0);
-
-  // close the client
-  close(client_fd);
-
-  if (rec_bytes <= 0)
-    return "";
-
-  std::string result(buffer, rec_bytes);
-  // remove any trailing '\n'
-  while (!result.empty() && (result.back() == '\n'))
-    result.pop_back();
-
-  return result;
+  return receivedline;
 }
 
 bool SafeSocket::isOpen() const { return fd_ != -1; }
@@ -69,6 +54,5 @@ bool SafeSocket::isOpen() const { return fd_ != -1; }
 SafeSocket::~SafeSocket() {
   if (fd_ != -1) {
     close(fd_);
-    unlink(socketPath_.c_str());
   }
 }

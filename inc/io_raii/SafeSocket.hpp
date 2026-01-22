@@ -7,8 +7,6 @@ class SafeSocket {
 private:
   int fd_ = -1;
 
-  // needed as socket cleanup(destructor) requires the path
-  std::string socketPath_;
 
 public:
   SafeSocket(const std::string& socketPath);
