@@ -11,7 +11,9 @@
 
 // Phase 3 includes
 #include "LogFormatter.hpp"
+#include "LogManagerBuilder.hpp"
 #include "LogPolicies.hpp"
+#include "LogSinkFactory.hpp"
 
 #include "SocketTelemetrySourceImpl.hpp"
 
@@ -20,13 +22,14 @@
 
 int main(int argc, char const *argv[]) {
 
-  std::unique_ptr<ILogSink> consoleSink = std::make_unique<ConsoleSinkImpl>();
-  std::unique_ptr<ILogSink> fileSink =
-      std::make_unique<FileSinkImpl>("testing.txt");
+  auto consoleSink = LogSinkFactory::createSink(LogSinkType_enum::CONSOLE);
+  auto fileSink =
+      LogSinkFactory::createSink(LogSinkType_enum::FILE, "testing.txt");
 
-  LogManager manager;
-  manager.addSink(std::move(consoleSink));
-  manager.addSink(std::move(fileSink));
+  auto manager = LogManagerBuilder()
+                     .addSink(std::move(consoleSink))
+                     .addSink(std::move(fileSink))
+                     .build();
 
   std::unique_ptr<ITelemetrySource> sourcefile =
       std::make_unique<FileTelemetrySourceImpl>(
@@ -47,7 +50,7 @@ int main(int argc, char const *argv[]) {
             formatter->formatDataToLossage(rawData);
 
         if (message.has_value()) {
-          manager.writeToAll(message.value());
+          manager->writeToAll(message.value());
         }
       }
     }

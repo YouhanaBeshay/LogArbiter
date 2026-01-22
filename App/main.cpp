@@ -11,18 +11,23 @@
 
 #include "SocketTelemetrySourceImpl.hpp"
 
+// Phase 3 includes
+#include "LogManagerBuilder.hpp"
+#include "LogSinkFactory.hpp"
+
 #include <chrono>
 #include <thread>
 
 int main(int argc, char const *argv[]) {
 
-  std::unique_ptr<ILogSink> consoleSink = std::make_unique<ConsoleSinkImpl>();
-  std::unique_ptr<ILogSink> fileSink =
-      std::make_unique<FileSinkImpl>("testing.txt");
+  auto consoleSink = LogSinkFactory::createSink(LogSinkType_enum::CONSOLE);
+  auto fileSink =
+      LogSinkFactory::createSink(LogSinkType_enum::FILE, "testing.txt");
 
-  LogManager manager;
-  manager.addSink(std::move(consoleSink));
-  manager.addSink(std::move(fileSink));
+  auto manager = LogManagerBuilder()
+                     .addSink(std::move(consoleSink))
+                     .addSink(std::move(fileSink))
+                     .build();  
 
   std::unique_ptr<ITelemetrySource> sourcefile =
       std::make_unique<FileTelemetrySourceImpl>("/proc/meminfo");
@@ -52,7 +57,7 @@ int main(int argc, char const *argv[]) {
         message.payload =
             totalmemory + " | " + freememory + " | " + availablememory;
 
-        manager.writeToAll(message);
+        manager->writeToAll(message);
       }
     }
 
@@ -69,7 +74,7 @@ int main(int argc, char const *argv[]) {
         // data read from socket
         message.payload = socketData;
 
-        manager.writeToAll(message);
+        manager->writeToAll(message);
       }
     }
 
