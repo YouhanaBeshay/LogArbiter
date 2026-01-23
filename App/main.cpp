@@ -27,6 +27,7 @@ int main(int argc, char const *argv[]) {
   auto manager = LogManagerBuilder()
                      .addSink(std::move(consoleSink))
                      .addSink(std::move(fileSink))
+                     .setBufferCapacity(202)
                      .build();  
 
   std::unique_ptr<ITelemetrySource> sourcefile =

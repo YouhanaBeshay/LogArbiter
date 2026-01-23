@@ -2,6 +2,7 @@
 
 #include "ILogSink.hpp"
 #include "LogMessage.hpp"
+#include "RingBuffer.hpp"
 
 #include <memory>
 #include <string>
@@ -10,9 +11,11 @@
 class LogManager {
 private:
   std::vector<std::unique_ptr<ILogSink>> sinks_;
-  std::vector<std::unique_ptr<LogMessage>> messages_;
+  RingBuffer<LogMessage> messages_;
 
 public:
+  LogManager(size_t capacity);
   void addSink(std::unique_ptr<ILogSink> sink);
-  void writeToAll(const LogMessage msg);
+  void addMessage(const LogMessage &msg);
+  void writeToAll(const LogMessage &msg);
 };
