@@ -1,8 +1,8 @@
 @startuml Main_ClassDiagram
 
 skinparam linetype ortho
-skinparam ranksep 60
-skinparam nodesep 20
+skinparam ranksep 80
+skinparam nodesep 40
 ' ==================== CLASSES ====================
 
 ' Interfaces
@@ -19,19 +19,39 @@ class LogMessage {
     +payload :  string
 }
 
+' Template Class
+class "RingBuffer<T>" as RingBuffer {
+    -buffer_ :  vector< optional<T>>
+    -head_ :  size_t
+    -tail_ :  size_t
+    -size_ :  size_t
+    -capacity_ :  size_t
+    +RingBuffer(capacity:  size_t)
+    +isFull() : bool
+    +isEmpty() : bool
+    +tryPush(value: T) : bool
+    +tryPop() :  optional<T>
+}
+
 ' Main Class
 rectangle  "Builder"{
 ' Builder
 class LogManagerBuilder {
     -sinks_ :  vector< unique_ptr<ILogSink>>
+    -messages_ :  vector<LogMessage>
+    -buffer_capacity_ :  size_t = 100
     +addSink(sink:  unique_ptr<ILogSink>) : LogManagerBuilder&
+    +addMessage(msg: const LogMessage&) : LogManagerBuilder&
+    +setBufferCapacity(capacity:  size_t) : LogManagerBuilder&
     +build() :  unique_ptr<LogManager>
 }
 class LogManager {
-    +sinks_ :  vector< unique_ptr<ILogSink>>
-    +messages_ :  vector< unique_ptr<LogMessage>>
+    -sinks_ :  vector< unique_ptr<ILogSink>>
+    -messages_ :  RingBuffer<LogMessage>
+    +LogManager(capacity:  size_t)
     +addSink(sink:  unique_ptr<ILogSink>) : void
-    +writeToAll(msg: const LogMessage) : void
+    +addMessage(msg: const LogMessage&) : void
+    +writeToAll(msg: const LogMessage&) : void
 }
 }
 
@@ -70,6 +90,7 @@ LogMessage -[hidden]left- ILogSink
 
 LogManager -[hidden]down- ILogSink
 
+RingBuffer -[hidden]left- LogMessage
 
 LogSinkFactory -[hidden]down- FileSinkImpl
 
@@ -80,8 +101,10 @@ ILogSink <|.. ConsoleSinkImpl
 
 LogManager o-- ILogSink 
 
+LogManager *-- RingBuffer 
 LogManager --> LogMessage
 ILogSink --> LogMessage
+RingBuffer --> LogMessage : <<T>>
 
 LogSinkFactory ..> FileSinkImpl 
 LogSinkFactory ..> ConsoleSinkImpl  

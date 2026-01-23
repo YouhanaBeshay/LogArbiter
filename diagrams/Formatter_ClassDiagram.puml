@@ -1,0 +1,76 @@
+@startuml LogFormatter_ClassDiagram
+
+' skinparam linetype polyline
+skinparam ranksep 80
+skinparam nodesep 20
+
+' ==================== CLASSES ====================
+
+' Template Class
+class "LogFormatter<Policy>" as LogFormatter {
+    -appName_ :  string
+    -msgDescription(val: float) :  string
+    -currentTimeStamp() :  string
+    +LogFormatter(appName: const  string&)
+    +formatDataToLossage(raw: const  string&) :  optional<LogMessage>
+    +~LogFormatter() = default
+}
+
+' Normal Class
+class LogMessage {
+    +appName :  string
+    +context :  string
+    +time :  string
+    +severity :  string
+    +payload :  string
+}
+
+
+' Policy Classes
+package "LogPolicies" {
+
+class CpuPolicy <<struct>> {
+    +{static} context : TelemetrySrc_enum = CPU
+    +{static} unit :  string_view = "%"
+    +{static} WARNING : float = 70.0f
+    +{static} CRITICAL : float = 95.0f
+    +{static} inferSeverity(val: float) : SeverityLvl_enum
+}
+
+class GpuPolicy <<struct>> {
+    +{static} context : TelemetrySrc_enum = GPU
+    +{static} unit :  string_view = "%"
+    +{static} WARNING : float = 80.0f
+    +{static} CRITICAL : float = 90.0f
+    +{static} inferSeverity(val: float) : SeverityLvl_enum
+}
+
+class RamPolicy <<struct>> {
+    +{static} context : TelemetrySrc_enum = RAM
+    +{static} unit :  string_view = "GB"
+    +{static} WARNING : float = 16.0f
+    +{static} CRITICAL : float = 22.0f
+    +{static} inferSeverity(val: float) : SeverityLvl_enum
+}
+
+}
+
+' ==================== LAYOUT CONTROL ====================
+
+LogFormatter -[hidden]down- LogPolicies
+LogMessage -[hidden]right- LogFormatter
+
+CpuPolicy -[hidden]right- GpuPolicy
+GpuPolicy -[hidden]right- RamPolicy
+
+
+' ==================== ACTUAL RELATIONSHIPS ====================
+
+LogFormatter --> LogMessage : <<creates>>
+
+LogFormatter ..> CpuPolicy : <<Policy>>
+LogFormatter ..> GpuPolicy : <<Policy>>
+LogFormatter ..> RamPolicy : <<Policy>>
+
+
+@enduml
