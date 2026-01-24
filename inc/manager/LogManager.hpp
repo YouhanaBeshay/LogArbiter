@@ -17,5 +17,6 @@ public:
   LogManager(size_t capacity);
   void addSink(std::unique_ptr<ILogSink> sink);
   void addMessage(const LogMessage &msg);
+  void flushMessages();
   void writeToAll(const LogMessage &msg);
 };

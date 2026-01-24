@@ -52,6 +52,7 @@ class LogManager {
     +addSink(sink:  unique_ptr<ILogSink>) : void
     +addMessage(msg: const LogMessage&) : void
     +writeToAll(msg: const LogMessage&) : void
+    +flushMessages() : void
 }
 }
 

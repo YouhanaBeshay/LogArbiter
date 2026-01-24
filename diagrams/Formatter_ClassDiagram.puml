@@ -13,7 +13,7 @@ class "LogFormatter<Policy>" as LogFormatter {
     -currentTimeStamp() :  string
     +LogFormatter(appName: const  string&)
     +formatDataToLossage(raw: const  string&) :  optional<LogMessage>
-    +~LogFormatter() = default
+
 }
 
 ' Normal Class
