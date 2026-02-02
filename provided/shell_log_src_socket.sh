@@ -10,7 +10,7 @@ trap "rm -f $SOCKET_PATH" EXIT
 (
     START_TIME=$(date +%s)
     while (( $(date +%s) - START_TIME < DURATION )); do
-        VALUE=$(awk -v r=$RANDOM 'BEGIN { printf "%.2f", r/32767*100 }')
+        VALUE=$(awk -v r=$RANDOM 'BEGIN { printf "%.2f", r/32767*24 }')
         echo "$VALUE"
         sleep "$INTERVAL"
     done

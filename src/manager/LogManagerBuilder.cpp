@@ -2,7 +2,8 @@
 
 std::unique_ptr<LogManager> LogManagerBuilder::build() {
 
-  auto builtLogManager = std::make_unique<LogManager>(buffer_capacity_);
+  auto builtLogManager = std::make_unique<LogManager>(buffer_capacity_,
+                                                      threadPoolSize_);
 
   for (size_t i = 0; i < sinks_.size(); i++) {
     builtLogManager->addSink(std::move(sinks_[i]));
@@ -27,5 +28,10 @@ LogManagerBuilder& LogManagerBuilder::addMessage(const LogMessage& msg) {
 
 LogManagerBuilder& LogManagerBuilder::setBufferCapacity(size_t capacity) {
   buffer_capacity_ = capacity;
+  return *this;
+}
+
+LogManagerBuilder& LogManagerBuilder::setThreadPoolSize(size_t size) {
+  threadPoolSize_ = size;
   return *this;
 }

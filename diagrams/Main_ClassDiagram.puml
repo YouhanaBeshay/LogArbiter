@@ -33,6 +33,18 @@ class "RingBuffer<T>" as RingBuffer {
     +tryPop() :  optional<T>
 }
 
+' ThreadPool Class
+class ThreadPool {
+    -workers_ :  vector<thread>
+    -tasksQueue_ :  queue<function<void>>
+    -mutex_ :  mutex
+    -cv_ :  condition_variable
+    -stopFlag_ :  bool
+    +ThreadPool(threadCount:  size_t)
+    +tryEnqueueTask(task:  function<void()>) : bool
+
+}
+
 ' Main Class
 rectangle  "Builder"{
 ' Builder
@@ -40,15 +52,18 @@ class LogManagerBuilder {
     -sinks_ :  vector< unique_ptr<ILogSink>>
     -messages_ :  vector<LogMessage>
     -buffer_capacity_ :  size_t = 100
+    -threadPoolSize_ :  size_t = 2
     +addSink(sink:  unique_ptr<ILogSink>) : LogManagerBuilder&
     +addMessage(msg: const LogMessage&) : LogManagerBuilder&
     +setBufferCapacity(capacity:  size_t) : LogManagerBuilder&
+    +setThreadPoolSize(size:  size_t) : LogManagerBuilder&
     +build() :  unique_ptr<LogManager>
 }
 class LogManager {
-    -sinks_ :  vector< unique_ptr<ILogSink>>
+    -sinks_ :  vector< shared_ptr<ILogSink>>
     -messages_ :  RingBuffer<LogMessage>
-    +LogManager(capacity:  size_t)
+    -threadPool_ :  unique_ptr<ThreadPool>
+    +LogManager(capacity:  size_t, threadPoolSize:  size_t)
     +addSink(sink:  unique_ptr<ILogSink>) : void
     +addMessage(msg: const LogMessage&) : void
     +writeToAll(msg: const LogMessage&) : void
@@ -95,6 +110,8 @@ RingBuffer -[hidden]left- LogMessage
 
 LogSinkFactory -[hidden]down- FileSinkImpl
 
+ThreadPool -[hidden]left- LogManager
+
 ' ==================== ACTUAL RELATIONSHIPS ====================
 
 ILogSink <|.. FileSinkImpl 
@@ -103,6 +120,7 @@ ILogSink <|.. ConsoleSinkImpl
 LogManager o-- ILogSink 
 
 LogManager *-- RingBuffer 
+LogManager *-- ThreadPool
 LogManager --> LogMessage
 ILogSink --> LogMessage
 RingBuffer --> LogMessage : <<T>>
