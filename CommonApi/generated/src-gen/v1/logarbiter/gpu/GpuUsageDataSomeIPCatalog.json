@@ -1,0 +1,8 @@
+{
+    "logarbiter.gpu.GpuUsageData" : {
+        "service_id": 6942,
+        "instances" : {
+            "logarbiter.gpu.GpuUsageData": 22138
+        }
+    }
+}

@@ -1,0 +1,29 @@
+import "platform:/plugin/org.genivi.commonapi.someip/deployment/CommonAPI-SOMEIP_deployment_spec.fdepl"
+import "/home/youhana/ITI_assignments2/Cpp_MajorTask/My_REPO/LogArbiter/CommonApi/fidl/logarbiter/gpu/gpu.fidl"
+
+define org.genivi.commonapi.someip.deployment for interface logarbiter.gpu.GpuUsageData {
+    SomeIpServiceID = 6942 
+
+    broadcast notifyGpuUsageDataChange {
+        SomeIpEventID = 38022
+        SomeIpEventGroups = { 7006 }
+        SomeIpReliable = false
+    }
+
+    method requestGpuUsageData {
+        SomeIpMethodID = 1
+        SomeIpReliable = false
+    }  
+}
+
+define org.genivi.commonapi.someip.deployment for provider as Service {
+    instance logarbiter.gpu.GpuUsageData {
+        InstanceId = "logarbiter.gpu.GpuUsageData"
+
+        SomeIpInstanceID = 22138
+
+        SomeIpUnicastAddress = "127.0.0.1"
+        SomeIpReliableUnicastPort = 30499
+        SomeIpUnreliableUnicastPort = 30500
+    }
+}

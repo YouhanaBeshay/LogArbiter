@@ -1,0 +1,33 @@
+[2026-02-06 13:22:35] [INFO] [LogArbiter] [CPU] Read from CPU 4.920000%
+[2026-02-06 13:22:36] [INFO] [LogArbiter] [CPU] Read from CPU 4.920000%
+[2026-02-06 13:22:37] [INFO] [LogArbiter] [CPU] Read from CPU 4.920000%
+[2026-02-06 13:22:38] [INFO] [LogArbiter] [CPU] Read from CPU 4.920000%
+[2026-02-06 13:22:39] [INFO] [LogArbiter] [CPU] Read from CPU 4.920000%
+[2026-02-06 13:22:40] [INFO] [LogArbiter] [CPU] Read from CPU 4.920000%
+[2026-02-06 13:22:41] [INFO] [LogArbiter] [CPU] Read from CPU 4.920000%
+[2026-02-06 13:22:42] [INFO] [LogArbiter] [CPU] Read from CPU 4.920000%
+[2026-02-06 13:22:43] [INFO] [LogArbiter] [CPU] Read from CPU 4.920000%
+[2026-02-06 13:22:44] [INFO] [LogArbiter] [CPU] Read from CPU 4.920000%
+[2026-02-06 13:23:24] [INFO] [LogArbiter] [CPU] Read from CPU 4.920000%
+[2026-02-06 13:23:25] [INFO] [LogArbiter] [CPU] Read from CPU 4.920000%
+[2026-02-06 13:23:26] [INFO] [LogArbiter] [CPU] Read from CPU 4.920000%
+[2026-02-06 13:23:27] [INFO] [LogArbiter] [CPU] Read from CPU 4.920000%
+[2026-02-06 13:23:43] [INFO] [LogArbiter CPU] [CPU] Read from CPU 4.920000%
+[2026-02-06 13:23:44] [INFO] [LogArbiter GPU] [GPU] Read from GPU 54.867577%
+[2026-02-06 13:23:44] [INFO] [LogArbiter CPU] [CPU] Read from CPU 4.920000%
+[2026-02-06 13:23:45] [INFO] [LogArbiter GPU] [GPU] Read from GPU 44.370293%
+[2026-02-06 13:23:45] [INFO] [LogArbiter CPU] [CPU] Read from CPU 4.920000%
+[2026-02-06 13:23:46] [INFO] [LogArbiter GPU] [GPU] Read from GPU 75.422630%
+[2026-02-06 13:23:46] [INFO] [LogArbiter CPU] [CPU] Read from CPU 4.920000%
+[2026-02-06 13:23:47] [INFO] [LogArbiter GPU] [GPU] Read from GPU 17.104904%
+[2026-02-06 13:23:47] [INFO] [LogArbiter CPU] [CPU] Read from CPU 4.920000%
+[2026-02-06 13:23:48] [INFO] [LogArbiter GPU] [GPU] Read from GPU 22.035896%
+[2026-02-06 13:23:48] [INFO] [LogArbiter CPU] [CPU] Read from CPU 4.920000%
+[2026-02-06 13:23:49] [INFO] [LogArbiter GPU] [GPU] Read from GPU 29.635796%
+[2026-02-06 13:23:49] [INFO] [LogArbiter CPU] [CPU] Read from CPU 4.920000%
+[2026-02-06 13:23:50] [INFO] [LogArbiter GPU] [GPU] Read from GPU 25.018955%
+[2026-02-06 13:23:50] [INFO] [LogArbiter CPU] [CPU] Read from CPU 4.920000%
+[2026-02-06 13:23:51] [INFO] [LogArbiter GPU] [GPU] Read from GPU 21.908983%
+[2026-02-06 13:23:51] [INFO] [LogArbiter CPU] [CPU] Read from CPU 4.920000%
+[2026-02-06 13:23:52] [INFO] [LogArbiter GPU] [GPU] Read from GPU 41.401596%
+[2026-02-06 13:23:52] [INFO] [LogArbiter CPU] [CPU] Read from CPU 4.920000%
