@@ -13,8 +13,12 @@ FileSinkImpl::FileSinkImpl(const std::string filePath) {
 
 void FileSinkImpl::write(const LogMessage &msg) {
 
+  std::lock_guard<std::mutex> lock(fileMutex_);
+
   if (file_.is_open()) {
     // we use the operator overloaded <<
     file_ << msg << std::endl;
   }
+  
+  file_.flush(); 
 }
