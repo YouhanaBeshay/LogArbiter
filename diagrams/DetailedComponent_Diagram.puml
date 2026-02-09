@@ -1,0 +1,67 @@
+@startuml Detailed_Component_Diagram
+
+left to right direction
+
+skinparam ranksep 2
+skinparam nodesep 20
+
+title LogArbiter - Detailed Component Data Flow
+
+package "Source Threads" {
+    [File Source] as FS
+    [Socket Source] as SS
+    [SomeIP Source] as SIP
+}
+
+package "Formatter" {
+    [LogFormatter<CpuPolicy>] as FMT_CPU
+    [LogFormatter<RamPolicy>] as FMT_RAM
+    [LogFormatter<GpuPolicy>] as FMT_GPU
+}
+
+queue "RingBuffer\n(LogMessages)" as RB
+
+[Writer Thread] as WT
+
+package "LogManager" {
+    [ThreadPool] as TP
+}
+
+package "Sinks" {
+    [Console Sink] as CS
+    [File Sink 1] as FS1
+    [File Sink "n"] as FS2
+}
+
+' Source to Formatter connections
+FS --> FMT_CPU : raw data\n(policy: cpu)
+SS --> FMT_RAM : raw data\n(policy: ram)
+SIP --> FMT_GPU : raw data\n(policy: gpu)
+
+' Formatter outputs
+FMT_CPU --> RB : LogMessage
+FMT_RAM --> RB : LogMessage
+FMT_GPU --> RB : LogMessage
+
+' RingBuffer to Writer
+RB --> WT : flushMessages()\nevery sink_flush_rate
+
+' Writer to ThreadPool
+WT --> TP : writeToAll()
+
+' ThreadPool to Sinks
+TP --> CS : write
+TP --> FS1 : write
+TP --> FS2 : write
+
+note bottom of RB
+  addMessage() - Source threads push here
+  flushMessages() - Writer thread pops all
+end note
+
+note bottom of TP
+  Each sink write is a separate task
+  Executed in parallel by thread pool
+end note
+
+@enduml
