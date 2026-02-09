@@ -59,7 +59,7 @@ public:
 
 
   bool tryPush(T value) {
-    if (!isFull()) {
+    if (isFull()) {
       return false;
     }
     buffer_[tail_] = value;
