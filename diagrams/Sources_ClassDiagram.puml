@@ -22,7 +22,6 @@ class SafeSocket {
     +SafeSocket(socketPath: const std::string&)
     +receiveSocket() : std::string
     +isOpen() : bool
-
 }
 
 ' Implementations (RAII Classes)
@@ -42,11 +41,29 @@ class SocketTelemetrySourceImpl {
     +readSource(out: std::string&) : bool
 }
 
+' Singleton + Adapter Implementation
+class SomeIPTelemetrySourceImpl <<Singleton>> <<Adapter>> {
+    -proxy_ : std::shared_ptr<GpuUsageDataProxy<>>
+    -isAvailable_ : std::atomic<bool>
+    -lastGpuReading_ : std::atomic<float>
+    -SomeIPTelemetrySourceImpl()
+    +openSource() : bool
+    +readSource(out: std::string&) : bool
+    +{static} getInstance() : SomeIPTelemetrySourceImpl&
+
+}
+
+' External Proxy class
+class "v1::logarbiter::gpu::GpuUsageDataProxy<>" as GpuUsageDataProxy <<generated>> {
+}
+
 ' Relationships
 ITelemetrySource <|.. FileTelemetrySourceImpl : implements
 ITelemetrySource <|.. SocketTelemetrySourceImpl : implements
+ITelemetrySource <|.. SomeIPTelemetrySourceImpl : implements
 
 FileTelemetrySourceImpl o-- SafeFile : contains
 SocketTelemetrySourceImpl o-- SafeSocket : contains
+SomeIPTelemetrySourceImpl o-- GpuUsageDataProxy : contains
 
 @enduml

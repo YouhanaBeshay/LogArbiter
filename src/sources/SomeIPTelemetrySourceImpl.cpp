@@ -11,13 +11,11 @@ SomeIPTelemetrySourceImpl::SomeIPTelemetrySourceImpl()
     : isAvailable_(false), lastGpuReading_(0.0f) {}
 
 bool SomeIPTelemetrySourceImpl::openSource() {
-    
   // runtime
   auto runtime = CommonAPI::Runtime::get();
   if (!runtime) {
     return false;
   }
-  
   // build the proxy
   std::string domain = "local";
   std::string instance = "logarbiter.gpu.GpuUsageData";
@@ -35,16 +33,14 @@ bool SomeIPTelemetrySourceImpl::openSource() {
 
           // if available subscribe to the event
           proxy_->getNotifyGpuUsageDataChangeEvent().subscribe(
-              [this](float value) {
-                lastGpuReading_ = value;
-              });
+              [this](float value) { lastGpuReading_ = value; });
         }
       });
 
   return true;
-}   
+}
 
- bool SomeIPTelemetrySourceImpl::readSource(std::string &out) {
+bool SomeIPTelemetrySourceImpl::readSource(std::string &out) {
   out.clear();
   if (isAvailable_) {
     out = std::to_string(lastGpuReading_);

@@ -8,10 +8,4 @@
 
 ### Run
 
-1.  **Note**: To run the server you need the provide some config for the CommonAPI (the serviceID an instanceID in hex format).
-    -  2 Options: 
-       1. `cp commonapi-someip.ini build/` 
-       2. `export COMMONAPI_SOMEIP_CONFIG=/path/to/commonapi-someip.ini`
-
-
-2. `./build/vSomeipServer_GpuUsage`
+- `./build/vSomeipServer_GpuUsage`
