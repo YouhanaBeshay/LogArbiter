@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/main.qml</file>
+        <file>qml/ControlPanel.qml</file>
+        <file>qml/LogViewer.qml</file>
+        <file>qml/ConfigEditor.qml</file>
+        <file>qml/SplashScreen.qml</file>
+        <file>logo/logo.png</file>
+    </qresource>
+</RCC>

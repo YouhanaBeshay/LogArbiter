@@ -1,43 +1,41 @@
 {
-  "log_manager": {
-    "buffer_capacity": 202,
-    "thread_pool_size": 4,
-    "sink_flush_rate_ms": 500
-  },
-  
-  "sinks": {
-    "console": {
-      "enabled": true
+    "log_manager": {
+        "buffer_capacity": 202,
+        "sink_flush_rate_ms": 500,
+        "thread_pool_size": 4
     },
-    "files": [
-      {
-        "enabled": true,
-        "path": "output.log"
-      },
-      {
-        "enabled": true,
-        "path": "backup.log"
-      }
-    ]
-  },
-  
-  "sources": {
-    "file": {
-      "enabled": true,
-      "path": "/home/youhana/ITI_assignments2/Cpp_MajorTask/My_REPO/LogArbiter/provided/shell_logs.log",
-      "parse_rate_ms": 1900,
-      "policy": "cpu"
+    "sinks": {
+        "console": {
+            "enabled": true
+        },
+        "files": [
+            {
+                "enabled": true,
+                "path": "output.log"
+            },
+            {
+                "enabled": true,
+                "path": "backup.log"
+            }
+        ]
     },
-    "socket": {
-      "enabled": true,
-      "path": "/home/youhana/ITI_assignments2/Cpp_MajorTask/My_REPO/LogArbiter/provided/telemetry.sock",
-      "parse_rate_ms": 1500,
-      "policy": "ram"
-    },
-    "someip": {
-      "enabled": true,
-      "parse_rate_ms": 1200,
-      "policy": "gpu"
+    "sources": {
+        "file": {
+            "enabled": true,
+            "parse_rate_ms": 1300,
+            "path": "/home/youhana/ITI_assignments2/Cpp_MajorTask/My_REPO/LogArbiter/provided/shell_logs.log",
+            "policy": "cpu"
+        },
+        "socket": {
+            "enabled": true,
+            "parse_rate_ms": 1800,
+            "path": "/home/youhana/ITI_assignments2/Cpp_MajorTask/My_REPO/LogArbiter/provided/telemetry.sock",
+            "policy": "ram"
+        },
+        "someip": {
+            "enabled": true,
+            "parse_rate_ms": 1600,
+            "policy": "gpu"
+        }
     }
-  }
 }
