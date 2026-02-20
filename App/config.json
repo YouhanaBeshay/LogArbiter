@@ -21,13 +21,13 @@
     },
     "sources": {
         "file": {
-            "enabled": true,
+            "enabled": false,
             "parse_rate_ms": 1300,
             "path": "/home/youhana/ITI_assignments2/Cpp_MajorTask/My_REPO/LogArbiter/provided/shell_logs.log",
             "policy": "cpu"
         },
         "socket": {
-            "enabled": true,
+            "enabled": false,
             "parse_rate_ms": 1800,
             "path": "/home/youhana/ITI_assignments2/Cpp_MajorTask/My_REPO/LogArbiter/provided/telemetry.sock",
             "policy": "ram"

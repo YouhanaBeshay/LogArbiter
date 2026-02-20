@@ -5,6 +5,9 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
 
+set(CMAKE_BUILD_RPATH "$ORIGIN/lib")
+
+
 # Generated source files
 set(GEN_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../generated/src-gen/v1/logarbiter/gpu)
 
@@ -24,12 +27,14 @@ set(GEN_STUB_SRCS
 find_package(CommonAPI 3.2.0 REQUIRED)
 find_package(CommonAPI-SomeIP 3.2.0 REQUIRED)
 find_package(vsomeip3 3.4.10 REQUIRED)
+find_package(Boost REQUIRED COMPONENTS system thread filesystem)  
 
 # Include directories
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/../generated/src-gen
     ${CMAKE_CURRENT_SOURCE_DIR}/../generated/src-gen/v1/logarbiter/gpu
     ${CMAKE_CURRENT_SOURCE_DIR}/inc
+    ${Boost_INCLUDE_DIRS}
 
 )
 
@@ -48,4 +53,5 @@ target_link_libraries(${PROJECT_NAME}
     CommonAPI
     CommonAPI-SomeIP
     vsomeip3
+    ${Boost_LIBRARIES}  
 )

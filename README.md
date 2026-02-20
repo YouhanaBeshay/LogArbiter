@@ -136,14 +136,16 @@ The system is built with thread safety in mind, using a producer-consumer patter
         ./vSomeipServer_GpuUsage
         ```
 
-- **Step 2:** Run LogArbiter
+- **Step 2:** Run LogArbiter using the provided `runLogArbiter.sh` script:
+  -  This script sets up the multicast route and environment variable for the LogArbiter binary 
+  - LogArbiter opens a multicast route to be able to connect to the vSomeIP server on the Pi the multicast and interface are set/configured in [`runLogArbiter.sh`](./runLogArbiter.sh)
     - Terminal 4 - Main Application:
         ```bash 
-        cd build
-        ./LogArbiter
+        ./runLogArbiter.sh
         ```
 ---
 ## Configuration
+. 
 - LogArbiter uses a JSON configuration file located at [`App/config.json`](./App/config.json) for runtime configuration.
 
 ### Configuration Options

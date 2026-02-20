@@ -57,6 +57,11 @@ Rectangle {
                     text: appController.appRunning ? "■ Stop App" : "▶ Start App"
                     highlighted: !appController.appRunning
                     Material.background: appController.appRunning ? "#F44336" : "#4CAF50"
+                    hoverEnabled: true   // IMPORTANT for desktop hover
+
+                    ToolTip.visible: hovered && !appController.appRunning
+                    ToolTip.delay: 500
+                    ToolTip.text: "Start the application (requires password for vSomeIP multicast)"
                     onClicked: {
                         if (appController.appRunning) {
                             appController.stopApp()
@@ -109,6 +114,13 @@ Rectangle {
                     Layout.fillWidth: true
                     text: appController.someIPRunning ? "■ SomeIP Server" : "▶ SomeIP Server"
                     Material.background: appController.someIPRunning ? root.accentColor : undefined
+                    enabled: false         
+                    hoverEnabled: true      
+
+                    ToolTip.visible: hovered
+                    ToolTip.delay: 400
+                    ToolTip.text: "vSomeIP server is expected to be on the Raspberry Pi"
+
                     onClicked: appController.toggleSomeIP()
                 }
             }

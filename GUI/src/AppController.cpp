@@ -148,16 +148,19 @@ void AppController::startApp() {
     
     if (appRunning()) return;
     
-    if (!QFileInfo::exists(logArbiterPath_)) {
-        emit error("LogArbiter not found: " + logArbiterPath_);
+    QFileInfo configInfo(configPath_);
+    QString scriptPath = configInfo.absolutePath() + "/../runLogArbiter.sh";
+    
+    if (!QFileInfo::exists(scriptPath)) {
+        emit error("Launch script not found: " + scriptPath);
         return;
     }
     
+
     appProcess_ = new QProcess(this);
     
-    QFileInfo configInfo(configPath_);
-    QString buildDir = configInfo.absolutePath() + "/../build/";
-    appProcess_->setWorkingDirectory(buildDir);
+    QString scriptDir = QFileInfo(scriptPath).absolutePath();
+    appProcess_->setWorkingDirectory(scriptDir);
     
     connect(appProcess_, &QProcess::readyReadStandardOutput, this, &AppController::onProcessOutput);
     connect(appProcess_, &QProcess::readyReadStandardError, this, &AppController::onProcessError);
@@ -168,7 +171,8 @@ void AppController::startApp() {
                 emit appRunningChanged();
             });
     
-    appProcess_->start(logArbiterPath_);
+    // Run the script directly 
+    appProcess_->start("sh", QStringList() << scriptPath);
     
     if (appProcess_->waitForStarted(5000)) {
         qDebug() << "LogArbiter started, PID:" << appProcess_->processId();
